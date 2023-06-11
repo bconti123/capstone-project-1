@@ -14,10 +14,10 @@ which is fine, just outline what kind of data you would like it to contain.
 4. In brief, outline your approach to creating your project (knowing that you may not
 know everything in advance and that these details might change later). Answer
 questions like the ones below, but feel free to add more information:
-a. What does your database schema look like?
-b. What kinds of issues might you run into with your API?
-c. Is there any sensitive information you need to secure?
-d. What functionality will your app include?
-e. What will the user flow look like?
-f. What features make your site more than CRUD? Do you have any stretch
-goals?
+    a. What does your database schema look like?
+    b. What kinds of issues might you run into with your API?
+    c. Is there any sensitive information you need to secure?
+    d. What functionality will your app include?
+    e. What will the user flow look like?
+    f. What features make your site more than CRUD? Do you have any stretch
+    goals?
