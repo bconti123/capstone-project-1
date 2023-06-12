@@ -27,7 +27,10 @@ questions like the ones below, but feel free to add more information:
     - d. What functionality will your app include?
         - Search cards with the name, monster/spell/trap card, card types, and card description from Yu-Gi-Oh! API.
         - Check top most views cards.
-        - The number of views on each card in history (Possibly)
+        - The posts and comments for card ruling discussion.
+        - Highlight specific symbols and words with color in card description's text to make easy to read for users.
+        - Ruling explaination with specific words and symbols. If more info, click the link directly to Yu-Gi-Oh! wiki ruling website. **(Possibly)**
+        - The number of views on each card in history **(Possibly)**
     - e. What will the user flow look like?
         - Sign Up/Login Account (Optional), including hashed password
         - Search form
