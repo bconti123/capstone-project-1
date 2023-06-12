@@ -1,5 +1,7 @@
 # Capstone Proposal
 
+#### YGOEffectChecker App
+
 1. What goal will your website be designed to achieve?
     - This website shows card images, information about the card type (monster, spell, trap), the monster's stats (Level, ATK, DEF, attribute, type, etc.), and what the effect does. Addresses the misinterpretation of game states and rulings due to card descriptions' often overlooked semicolon and colon symbols. This website highlights card text like the pay cost to activate an effect, the condition/meet requirement, and other complex interactions in the game.
 
