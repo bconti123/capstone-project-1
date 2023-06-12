@@ -31,6 +31,7 @@ questions like the ones below, but feel free to add more information:
         - Highlight specific symbols and words with color in card description's text to make easy to read for users.
         - Ruling explaination with specific words and symbols. If more info, click the link directly to Yu-Gi-Oh! wiki ruling website. **(Possibly)**
         - The number of views on each card in history **(Possibly)**
+        - **Legacy cards with pre-errata and old errata are not supported.**
     - e. What will the user flow look like?
         - Sign Up/Login Account (Optional), including hashed password
         - Search form
