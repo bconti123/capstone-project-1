@@ -17,7 +17,7 @@ which is fine, just outline what kind of data you would like it to contain.
 know everything in advance and that these details might change later). Answer
 questions like the ones below, but feel free to add more information:
     - a. What does your database schema look like?
-    ![Database Schema](/images/DatabaseSchemaDesign.png)
+    ![Database Schema](/Database-Schemas/DatabaseSchemaDesign.png)
     I am not sure about API database already has **card id**
     - b. What kinds of issues might you run into with your API?
         - Rate Limit is 20 requests per 1 second.
