@@ -88,9 +88,9 @@ class UserModelTestCase(TestCase):
     
     def test_user_sign_up_success(self):
         
-        u3 = User.signup(self.g1.id, 'Kaiba', 'password', 'Kaiba@KC.com')
-        self.assertEqual(u3.username, 'Kaiba')
-        self.assertEqual(u3.email, 'Kaiba@KC.com')
+        u = User.signup(self.g1.id, 'Kaiba', 'password', 'Kaiba@KC.com')
+        self.assertEqual(u.username, 'Kaiba')
+        self.assertEqual(u.email, 'Kaiba@KC.com')
 
     def test_user_sign_up_fail(self):
         with self.assertRaises(IntegrityError):
