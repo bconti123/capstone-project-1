@@ -20,7 +20,10 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
-    isGuest = db.Column(db.Boolean)
+    email = db.Column(db.Text, nullable=False)
+    isGuest = db.Column(db.Boolean, default=True)
+
+    comments = db.relationship("Comment", backref='user', cascade="all, delete-orphan")
 
     def __repr__(self):
         if self.isGuest:
@@ -66,4 +69,13 @@ class View(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=date_today)
+
+class Comment(db.Model):
+    """ Comment """
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    context = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=date_today)
