@@ -33,9 +33,10 @@ class User(db.Model):
         
     @classmethod
     def guest_visit(cls):
-        db.session.add(User())
+        guest = User()
+        db.session.add(guest)
         db.session.commit()
-        return f"<Guest created>"
+        return guest
     
     @classmethod
     def signup(cls, id, username, password, email):
@@ -49,7 +50,7 @@ class User(db.Model):
         user.isGuest = False
 
         db.session.commit()
-        return f'<User ID: {id} - {username} was created!>'
+        return user
 
     @classmethod
     def authenticate(cls, username, password):
