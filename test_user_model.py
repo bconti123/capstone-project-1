@@ -2,7 +2,7 @@
 
 # run these tests like:
 #
-#    python3 -m unittest test_user_model.py
+#    python3 -m unittest -v test_user_model.py
 import os
 from unittest import TestCase
 
@@ -73,11 +73,9 @@ class UserModelTestCase(TestCase):
     
     def test_guest_created(self):
         
-        guest = User.guest_visit()
-        expected_repr = f"<Guest created>"
+        g = User.guest_visit()
+        self.assertTrue(g.isGuest)
 
-        self.assertEqual(guest, expected_repr)
-    
     def test_guest_repr(self):
 
         expected_repr = f'<#{self.g1.id}: Guest>'
@@ -91,7 +89,8 @@ class UserModelTestCase(TestCase):
     def test_user_sign_up_success(self):
         
         u3 = User.signup(self.g1.id, 'Kaiba', 'password', 'Kaiba@KC.com')
-        self.assertIn('Kaiba', u3)
+        self.assertEqual(u3.username, 'Kaiba')
+        self.assertEqual(u3.email, 'Kaiba@KC.com')
 
     def test_user_sign_up_fail(self):
         with self.assertRaises(IntegrityError):
