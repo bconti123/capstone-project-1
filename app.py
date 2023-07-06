@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import db, connect_db, User, View
@@ -52,9 +52,14 @@ def add_user_to_g():
         if CURR_LOGIN_KEY in session:
             del session[CURR_LOGIN_KEY]
 
-    
-
 
 @app.route('/')
 def homepage():
-    return render_template('/base.html')
+    return render_template('/index.html')
+
+
+### User Routes ###
+@app.route('/users/register')
+def register():
+    user_id = session[CURR_USER_KEY]
+    return render_template('/users/register.html')
