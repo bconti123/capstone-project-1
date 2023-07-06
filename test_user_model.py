@@ -12,7 +12,7 @@ from sqlalchemy.exc import IntegrityError
 # to use a different database for tests (we need to do this
 # before we import our app, since that will have already
 # connected to the database
-os.environ['DATABASE_URL'] = "postgresql:///warbler-test"
+os.environ['DATABASE_URL'] = "postgresql:///yugioh_eff_checker_test"
 
 from app import app
 
