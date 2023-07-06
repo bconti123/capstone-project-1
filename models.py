@@ -27,20 +27,21 @@ class User(db.Model):
 
     def __repr__(self):
         if self.isGuest:
-            return f'#{self.id}: Guest'
+            return f"<#{self.id}: Guest>"
         else:
-            return f'User #{self.id}: {self.username}'
+            return f"<User #{self.id}: {self.username}>"
+        
     @classmethod
     def guest_visit(cls):
         db.session.add(User())
         db.session.commit()
-        return f'Guest created'
+        return f"<Guest created>"
     
     @classmethod
     def signup(cls, id, username, password, email):
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
-        user = User.query.get(id)
+        user = db.session.get(User, id)
 
         user.username = username,
         user.password = hashed_pwd,
@@ -48,7 +49,7 @@ class User(db.Model):
         user.isGuest = False
 
         db.session.commit()
-        return f'User ID: {id} - {username} was created!'
+        return f'<User ID: {id} - {username} was created!>'
 
     @classmethod
     def authenticate(cls, username, password):
@@ -83,7 +84,7 @@ class Comment(db.Model):
     """ Comment """
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
+    card_api_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     context = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=date_today)

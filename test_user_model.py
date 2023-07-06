@@ -8,6 +8,7 @@ from unittest import TestCase
 
 from models import db, User
 from sqlalchemy.exc import IntegrityError
+
 # BEFORE we import our app, let's set an environmental variable
 # to use a different database for tests (we need to do this
 # before we import our app, since that will have already
@@ -19,7 +20,7 @@ from app import app
 # Create our tables (we do this here, so we only create the tables
 # once for all tests --- in each test, we'll delete the data
 # and create fresh new clean test data
-
+db.drop_all()
 class UserModelTestCase(TestCase):
     """ Test Users """
 
@@ -37,26 +38,28 @@ class UserModelTestCase(TestCase):
             id = 2222
         )
         # Create 2 users with an specific informations
-        u1 = User(
-            id = 12341234,
-            username = 'Yugi',
-            password = 'password',
-            email = 'Yugi@yugi.com'
-        )
-        u2 = User(
-            id = 3333,
-            username = 'Joey',
-            password = 'password',
-            email = 'Joey@joey.com'
+        u1 = User.signup(
+            1,
+            'Yugi',
+            'password',
+            'Yugi@yugi.com',
         )
 
-        db.session.add(g1, u1, u2)
+        u2 = User.signup(
+            2,
+            'Joey',
+            'password',
+            'Joey@joey.com',
+        )
+ 
+
+        db.session.add(g1)
         db.session.commit()
 
-        u1 = User.query.get(12341234)
-        u2 = User.query.get(3333)
-        g1 = User.query.get(2222)
 
+        u1 = db.session.get(User, 1)
+        u2 = db.session.get(User, 2)
+        g1 = db.session.get(User, 2222)
         self.u1 = u1
         self.u2 = u2
         self.g1 = g1
@@ -67,3 +70,42 @@ class UserModelTestCase(TestCase):
         res = super().tearDown()
         db.session.rollback()
         return res
+    
+    def test_guest_created(self):
+        
+        guest = User.guest_visit()
+        expected_repr = f"<Guest created>"
+
+        self.assertEqual(guest, expected_repr)
+    
+    def test_guest_repr(self):
+
+        expected_repr = f'<#{self.g1.id}: Guest>'
+        self.assertEqual(repr(self.g1), expected_repr)
+    
+    def test_user_repr(self):
+
+        expected_repr = f'<User #{self.u1.id}: {self.u1.username}>'
+        self.assertEqual(repr(self.u1), expected_repr)
+    
+    def test_user_sign_up_success(self):
+        
+        u3 = User.signup(self.g1.id, 'Kaiba', 'password', 'Kaiba@KC.com')
+        self.assertIn('Kaiba', u3)
+
+    def test_user_sign_up_fail(self):
+        with self.assertRaises(IntegrityError):
+            User.signup(self.g1.id, 'Yugi', 'password', 'Atem@Yugi.com')
+
+    def test_user_sign_up_fail_password(self):
+        with self.assertRaises(ValueError):
+            User.signup(self.g1.id, 'Kaiba', '', 'Kaiba@KC.com')
+    
+    def test_user_authenticate_success(self):
+        self.assertTrue(User.authenticate('Yugi', 'password'))
+    
+    def test_user_authenticate_username_fail(self):
+        self.assertFalse(User.authenticate('Fake', 'password'))
+
+    def test_user_authenticate_password_fail(self):
+        self.assertFalse(User.authenticate('Yugi', 'PWD'))

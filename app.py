@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
 
-from models import db, connect_db, User, Card, View
+from models import db, connect_db, User, View
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
