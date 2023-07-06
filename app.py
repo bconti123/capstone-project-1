@@ -9,6 +9,7 @@ CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
 
 app = Flask(__name__)
+app.app_context().push() # Flask latest version does need this.
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///yugioh_eff_checker'))

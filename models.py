@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 
-date_today = datetime().now.strftime("%Y-%m-%d %H:%M:%S")
+date_today = datetime.today()
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -18,9 +18,9 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text, nullable=False, unique=True)
-    password = db.Column(db.Text, nullable=False)
-    email = db.Column(db.Text, nullable=False)
+    username = db.Column(db.Text, unique=True)
+    password = db.Column(db.Text)
+    email = db.Column(db.Text)
     isGuest = db.Column(db.Boolean, default=True)
 
     comments = db.relationship("Comment", backref='user', cascade="all, delete-orphan")
@@ -30,7 +30,17 @@ class User(db.Model):
             return f'#{self.id}: Guest'
         else:
             return f'User #{self.id}: {self.username}'
+    @classmethod
+    def guest_visit(cls):
 
+        guest = User(
+            username = None,
+            password = None
+        )
+        db.session.add(guest)
+        db.session.commit()
+        return f'Guest created'
+    
     @classmethod
     def signup(cls, id, username, password):
 
