@@ -20,7 +20,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text, unique=True)
     password = db.Column(db.Text)
-    email = db.Column(db.Text)
+    email = db.Column(db.Text, unique=True)
     isGuest = db.Column(db.Boolean, default=True)
 
     comments = db.relationship("Comment", backref='user', cascade="all, delete-orphan")
@@ -32,25 +32,20 @@ class User(db.Model):
             return f'User #{self.id}: {self.username}'
     @classmethod
     def guest_visit(cls):
-
-        guest = User(
-            username = None,
-            password = None
-        )
-        db.session.add(guest)
+        db.session.add(User())
         db.session.commit()
         return f'Guest created'
     
     @classmethod
-    def signup(cls, id, username, password):
+    def signup(cls, id, username, password, email):
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+        user = User.query.get(id)
 
-        User(
-        id = id,
-        username = username,
-        password = hashed_pwd,
-        isGuest = False)
+        user.username = username,
+        user.password = hashed_pwd,
+        user.email = email,
+        user.isGuest = False
 
         db.session.commit()
         return f'User ID: {id} - {username} was created!'
@@ -66,18 +61,21 @@ class User(db.Model):
                 return user
             
         return False
-        
-class Card(db.Model):
-    """ Card """
-    __tablename__ = 'cards'
+
+class Images(db.Model):
+    """ Image """
+    __tablename__ = 'images'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
+    card_api_id = db.Column(db.Integer, nullable=False)
+    filename = db.Column(db.Text, nullable=False)
+    file_path = db.Column(db.Text, nullable=False)
 
 class View(db.Model):
     """ View """
     __tablename__ = 'views'
     id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
+    # card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
+    card_api_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=date_today)
 
