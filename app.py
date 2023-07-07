@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, render_template, session, g
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import SearchForm
+from forms import SearchForm, UserAddForm
 from models import db, connect_db, User, View
 
 CURR_USER_KEY = 'curr_user'
@@ -63,4 +63,5 @@ def homepage():
 @app.route('/users/register')
 def register():
     user_id = session[CURR_USER_KEY]
-    return render_template('/users/register.html')
+    form = UserAddForm()
+    return render_template('/users/register.html', form=form)
