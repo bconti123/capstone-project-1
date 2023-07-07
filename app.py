@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, render_template, session, g
 from flask_debugtoolbar import DebugToolbarExtension
-
+from forms import SearchForm
 from models import db, connect_db, User, View
 
 CURR_USER_KEY = 'curr_user'
@@ -55,7 +55,8 @@ def add_user_to_g():
 
 @app.route('/')
 def homepage():
-    return render_template('/index.html')
+    form = SearchForm()
+    return render_template('/index.html', form=form)
 
 
 ### User Routes ###

@@ -19,5 +19,10 @@ class UserEditForm(FlaskForm):
     """ Form for editing users """
 
     username = StringField('Username', validators=[DataRequired()])
-    email = StringField('email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[Length(min=6)])
+
+class SearchForm(FlaskForm):
+    """ Form for search cards """
+
+    search = StringField('Card Name')
