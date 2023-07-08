@@ -1,9 +1,10 @@
 import os
 
-from flask import Flask, render_template, session, g
+from flask import Flask, render_template, session, g, flash, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import SearchForm, UserAddForm
+from forms import SearchForm, UserAddForm, LoginForm
 from models import db, connect_db, User, View
+from sqlalchemy.exc import IntegrityError
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
@@ -32,26 +33,23 @@ def before_request_global():
     if not CURR_USER_KEY in session:
         guest = User.guest_visit()
         session[CURR_USER_KEY] = guest.id
+    # When logged user id and guest user id are same, delete guest user id in session.
 
-    if CURR_LOGIN_KEY in session:
-        del session[CURR_USER_KEY]
-    
-@app.before_request
-def add_user_to_g():
+def add_g_user():
     """ When we logged in, the website detect global login users """
     if CURR_LOGIN_KEY in session:
-        g.user = User.session.get(session[CURR_LOGIN_KEY])
+        g.user = db.session.get(User, session[CURR_LOGIN_KEY])
+        if g.user.id == session.get(CURR_USER_KEY):
+            del session[CURR_USER_KEY]
     else:
         g.user = None
     
-    def do_login(user):
-        session[CURR_LOGIN_KEY] = user.id
-    
-    def do_logout(user):
+def do_login(user):
+    session[CURR_LOGIN_KEY] = user.id
 
-        if CURR_LOGIN_KEY in session:
-            del session[CURR_LOGIN_KEY]
-
+def do_logout():
+    if CURR_LOGIN_KEY in session:
+        del session[CURR_LOGIN_KEY]
 
 @app.route('/')
 def homepage():
@@ -60,8 +58,49 @@ def homepage():
 
 
 ### User Routes ###
-@app.route('/users/register')
+@app.route('/users/register', methods=['GET', 'POST'])
 def register():
     user_id = session[CURR_USER_KEY]
     form = UserAddForm()
-    return render_template('/users/register.html', form=form)
+
+    if form.validate_on_submit():
+        try:
+            user = User.signup(
+                user_id,
+                form.username.data,
+                form.password.data,
+                form.email.data,
+            )
+            db.session.commit()
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            return render_template('/users/register.html', form=form)
+        
+        do_login(user)
+
+        return redirect('/')
+    else:
+        return render_template('/users/register.html', form=form)
+
+@app.route('/users/login', methods=['GET', 'POST'])
+def login():
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data, form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f'Hello, {user.username}!', 'success')
+            return redirect('/')
+        
+        flash('Invalid credentials.', 'danger')
+    
+    return render_template('/users/login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    do_logout()
+    flash('Logout successfully', 'success')
+    return redirect('/')

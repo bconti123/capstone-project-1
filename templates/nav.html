@@ -13,12 +13,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
+        {% if session['curr_login_user'] %}
+        <li class="nav-item">
+          <a class="nav-link disable" href="#">Hi {{ g.user.username }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Log out</a>
+        </li>
+        {% else %}
         <li class="nav-item">
           <a class="nav-link" href="/users/register">Sign Up</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/users/login">Login</a>
         </li>
+        {% endif %}
+
       </ul>
     </div>
   </div>
