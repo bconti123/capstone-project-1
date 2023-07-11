@@ -139,11 +139,14 @@ def find_card_id(id):
 
 def find_card_desc(card):
     desc = card[0]['desc']
-    list = []
+    result_list = []
     if ":" in desc:
-        cond = desc[0:desc.index(":")]
-        return list.append(cond)
+        uppercase_index = next((i for i, c in enumerate(desc) if c.isupper()), None)
+        cond = desc.index(":", uppercase_index)
+        substring = desc[uppercase_index:cond]
+        result_list.append({'condition' : substring})
         
+    return result_list
 
     return list
 # Card API Route
@@ -155,4 +158,5 @@ def card_search():
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):
     card = find_card_id(card_id)
-    return render_template('/cards/detail.html', data=card)
+    desc_list = find_card_desc(card)
+    return render_template('/cards/detail.html', data=card, desc_list=desc_list)
