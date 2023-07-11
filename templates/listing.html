@@ -2,8 +2,8 @@
   <div class="list-group">
     {% for card in data %}
     <div class="card">
-      <div class="card-header">{{card.name}} ID: {{card.id}}</div>
-      <a href="#" class="list-group-item list-group-item-action">
+      <div class="card-header">{{card.name}}</div>
+      <a href="/cards/{{card.id}}" class="list-group-item list-group-item-action">
         <div class="card-body">
           <h5 class="card-title">{{card.type}}</h5>
           <p>{{card.race}} / {{card.frameType.upper()}}</p>

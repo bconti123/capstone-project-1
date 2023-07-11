@@ -113,7 +113,7 @@ def logout():
 # Card functions
 def search_card(card):
     try: 
-        response = requests.get(f'https://db.ygoprodeck.com/api/v7/cardinfo.php?fname={card}')
+        response = requests.get(f'{BASE_API_KEY}?fname={card}')
         response.raise_for_status()
         obj = response.json()
         if 'data' in obj:
@@ -124,7 +124,28 @@ def search_card(card):
         print(f'Error: {e}')
         return []
 
+def find_card_id(id):
+    try: 
+        response = requests.get(f'{BASE_API_KEY}?id={id}')
+        response.raise_for_status()
+        obj = response.json()
+        if 'data' in obj:
+            return obj['data']
+        else:
+            return []
+    except (requests.exceptions.RequestException, ValueError) as e:
+        print(f'Error: {e}')
+        return []
 
+def find_card_desc(card):
+    desc = card[0]['desc']
+    list = []
+    if ":" in desc:
+        cond = desc[0:desc.index(":")]
+        return list.append(cond)
+        
+
+    return list
 # Card API Route
 @app.route('/cards')
 def card_search():
@@ -133,4 +154,5 @@ def card_search():
 
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):
-    return
+    card = find_card_id(card_id)
+    return render_template('/cards/detail.html', data=card)
