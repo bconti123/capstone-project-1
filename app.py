@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, session, g, flash, redirect
+from flask import Flask, render_template, session, g, flash, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import SearchForm, UserAddForm, LoginForm
 from models import db, connect_db, User, View
@@ -56,34 +56,11 @@ def do_logout():
     if CURR_LOGIN_KEY in session:
         del session[CURR_LOGIN_KEY]
 
-# Card functions
-def search_card(card):
-    try: 
-        response = requests.get(f'https://db.ygoprodeck.com/api/v7/cardinfo.php?fname={card}')
-        response.raise_for_status()
-        obj = response.json()
-        if 'data' in obj:
-            return obj['data']
-        else:
-            return []
-    except (requests.exceptions.RequestException, ValueError) as e:
-        print(f'Error: {e}')
-        return []
 
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route('/')
 def homepage():
-    form = SearchForm()
-    cards = search_card('Dark Magic')
-    if form.validate_on_submit():
-        card = form.search.data
-        cards = search_card(card)
-        return render_template('/index.html', form=form, data=cards)
-    return render_template('/index.html', form=form, data=cards)
-
-# @app.route('/')
-# def index():
-#     cards = session.pop('cards', [])
-#     return render_template('index.html', cards=cards)
+    return render_template('/index.html')
 
 ### User Routes ###
 @app.route('/users/register', methods=['GET', 'POST'])
@@ -133,4 +110,27 @@ def logout():
     return redirect('/')
 
 
+# Card functions
+def search_card(card):
+    try: 
+        response = requests.get(f'https://db.ygoprodeck.com/api/v7/cardinfo.php?fname={card}')
+        response.raise_for_status()
+        obj = response.json()
+        if 'data' in obj:
+            return obj['data']
+        else:
+            return []
+    except (requests.exceptions.RequestException, ValueError) as e:
+        print(f'Error: {e}')
+        return []
+
+
 # Card API Route
+@app.route('/cards')
+def card_search():
+    cards = search_card(request.args.get('search'))
+    return render_template('/index.html', data=cards)
+
+@app.route('/cards/<int:card_id>')
+def card_show(card_id):
+    return
