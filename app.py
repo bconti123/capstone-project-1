@@ -1,13 +1,16 @@
 import os
 
-from flask import Flask, render_template, session, g, flash, redirect, request
+from flask import Flask, render_template, session, g, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import SearchForm, UserAddForm, LoginForm
 from models import db, connect_db, User, View
 from sqlalchemy.exc import IntegrityError
 
+import requests
+
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
+BASE_API_KEY = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
 
 app = Flask(__name__)
 app.app_context().push() # Flask latest version does need this.
@@ -35,6 +38,7 @@ def before_request_global():
         session[CURR_USER_KEY] = guest.id
     # When logged user id and guest user id are same, delete guest user id in session.
 
+@app.before_request
 def add_g_user():
     """ When we logged in, the website detect global login users """
     if CURR_LOGIN_KEY in session:
@@ -43,7 +47,8 @@ def add_g_user():
             del session[CURR_USER_KEY]
     else:
         g.user = None
-    
+
+# Login and Logout functions    
 def do_login(user):
     session[CURR_LOGIN_KEY] = user.id
 
@@ -51,11 +56,34 @@ def do_logout():
     if CURR_LOGIN_KEY in session:
         del session[CURR_LOGIN_KEY]
 
-@app.route('/')
+# Card functions
+def search_card(card):
+    try: 
+        response = requests.get(f'https://db.ygoprodeck.com/api/v7/cardinfo.php?fname={card}')
+        response.raise_for_status()
+        obj = response.json()
+        if 'data' in obj:
+            return obj['data']
+        else:
+            return []
+    except (requests.exceptions.RequestException, ValueError) as e:
+        print(f'Error: {e}')
+        return []
+
+@app.route('/', methods=['GET', 'POST'])
 def homepage():
     form = SearchForm()
-    return render_template('/index.html', form=form)
+    cards = search_card('Dark Magic')
+    if form.validate_on_submit():
+        card = form.search.data
+        cards = search_card(card)
+        return render_template('/index.html', form=form, data=cards)
+    return render_template('/index.html', form=form, data=cards)
 
+# @app.route('/')
+# def index():
+#     cards = session.pop('cards', [])
+#     return render_template('index.html', cards=cards)
 
 ### User Routes ###
 @app.route('/users/register', methods=['GET', 'POST'])
@@ -71,7 +99,6 @@ def register():
                 form.password.data,
                 form.email.data,
             )
-            db.session.commit()
         except IntegrityError:
             flash("Username already taken", 'danger')
             return render_template('/users/register.html', form=form)
@@ -104,3 +131,6 @@ def logout():
     do_logout()
     flash('Logout successfully', 'success')
     return redirect('/')
+
+
+# Card API Route

@@ -3,9 +3,11 @@
 
 <div class="container">
     <h1> YGOEffectChecker </h1>
-    <form action="" method="POST">
-        <div class="input-group mb-3">
-        {% include 'form_field.html' %}
+    <form action="/" methods="POST">
+        <div class="input-group mb-5">
+        {#% include 'form_field.html' %#}
+        {{ form.search.label }}
+        {{ form.search }}
         <button class="btn btn-primary">Search</button>
         </div>
     </form>
