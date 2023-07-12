@@ -9,7 +9,8 @@
         <button class="btn btn-primary">Search</button>
         </div>
     </form>
-
-    {% include 'listing.html' %}
+    {% block listing %}
+    <!-- Listing Here -->
+    {% endblock %}
 </div>
 {% endblock %}

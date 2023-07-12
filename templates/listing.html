@@ -1,7 +1,11 @@
-
+{% extends 'index.html' %}
+{% block listing %}
 <div class="list-group">
   {% if data|length == 0 %}
-  <strong>No Card in Database</strong>
+  
+  <div class="card">
+    <div class="card-header"><strong>No Card in Database</strong></div>
+  </div>
   {% else %}
     {% for card in data %}
     <div class="card">
@@ -13,4 +17,5 @@
     {% endfor %}
   {% endif %}
 </div>
+{% endblock %}
 

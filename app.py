@@ -169,7 +169,7 @@ def find_card_desc(card):
 @app.route('/cards')
 def card_search():
     cards = search_card(request.args.get('search'))
-    return render_template('/index.html', data=cards)
+    return render_template('/listing.html', data=cards)
 
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):
