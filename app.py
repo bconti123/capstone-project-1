@@ -138,17 +138,33 @@ def find_card_id(id):
         return []
 
 def find_card_desc(card):
-    desc = card[0]['desc']
+    desc_list = card[0]['desc'].split('. ')
     result_list = []
-    if ":" in desc:
-        uppercase_index = next((i for i, c in enumerate(desc) if c.isupper()), None)
-        cond = desc.index(":", uppercase_index)
-        substring = desc[uppercase_index:cond]
-        result_list.append({'condition' : substring})
+    cond_obj = {}
+    cost_obj = {}
+    act_obj = {}
+    for desc in desc_list:
+
+        if ":" in desc:
+            cond = desc.index(":")
+
+            substring = desc[0:cond+1]
+            
+            cond_obj = {'condition' : substring}
+            desc = desc.replace(substring, '')
+        if ";" in desc:
+            cost = desc.index(";")
+            substring = desc[0:cost+1]
         
+            cost_obj = {'cost' : substring}
+            desc = desc.replace(substring, '')
+        
+        act_obj = {'act': desc}
+        # ISSUES: dot '●', Fix it later.
+        result_list.append({**cond_obj, **cost_obj, **act_obj})
+
     return result_list
 
-    return list
 # Card API Route
 @app.route('/cards')
 def card_search():
@@ -159,4 +175,5 @@ def card_search():
 def card_show(card_id):
     card = find_card_id(card_id)
     desc_list = find_card_desc(card)
+
     return render_template('/cards/detail.html', data=card, desc_list=desc_list)

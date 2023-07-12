@@ -7,21 +7,7 @@
             {% for card in data %}
                 <div class="card">
                     <div class="card-header">{{card.name}}</div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{card.type}}</h5>
-                        <p>{{card.race}} / {{card.frameType.upper()}}</p>
-                        {% if 'Monster' in card.type %}
-                        <p>{% if 'xyz' in card.frameType %}
-                          Rank : {{card.level}} /
-                          {% elif 'link' in card.frameType %}
-                          {% else %}
-                          Level : {{card.level}} /
-                          {% endif %}
-                          ATK: {{card.atk}} 
-                          {% if 'link' not in card.frameType %}/ DEF: {{card.def}} {% else %}/ Link - {{card.linkval}}{% endif %}</p>
-                        {% endif %}
-                        <p class="card-text">{{card.desc}}</p>
-                    </div>
+                    {% include 'card_display.html' %}
                 </div>
             {% endfor %}
         </div>
@@ -31,9 +17,35 @@
                 <div class="card">
                     <div class="card-header">Effect Check</div>
                     <div class="card-body">
-                        {% for desc in desc_list %}
-                        <p><span class="circle-icon">{{loop.index}}</span> Effect: {{desc.condition}}</p>
-                        {% endfor %}
+                        {% if 'normal' in card.frameType or '.' not in card.desc %}
+                        <strong>No Effect</strong>
+                        {% else %}
+                            {% for desc in desc_list %}    
+                                <p><span class="circle-icon">{{loop.index}}</span> Effect: <br>
+                                    {% if 'condition' in desc %}
+                                        <strong>Condition</strong> <br> {{desc.condition}}
+                                    {% endif %}
+
+                                    {% if 'cost' in desc %}
+                                        <br><strong>Cost</strong> <br> {{desc.cost}}
+                                    {% endif %}
+                                    
+                                    {% if 'act' in desc %}
+                                        {% if '●' in desc.act %}
+                                            <br><strong>Activation</strong>
+                                            {% for line in desc.act.split('●') %}
+                                                {% if line|trim %}
+                                                    <br>● {{ line|trim }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <br><strong>Activation</strong>
+                                            <br>{{desc.act}}
+                                        {% endif %}
+                                    {% endif %}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

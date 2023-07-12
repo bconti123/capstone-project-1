@@ -1,0 +1,20 @@
+<div class="card-body">
+    <h5 class="card-title">{{card.type}}</h5>
+    <p>{{card.race}} / {{card.frameType.upper()}}</p>
+    {% if 'Monster' in card.type %}
+        <p>{% if 'xyz' in card.frameType %}
+        Rank : {{card.level}} /
+    {% elif 'link' in card.frameType %}
+        <!-- None -->
+    {% else %}
+        Level : {{card.level}} /
+    {% endif %}
+        ATK: {{card.atk}} 
+    {% if 'link' not in card.frameType %}
+        / DEF: {{card.def}} 
+    {% else %}
+        / Link - {{card.linkval}}{% endif %}</p>
+    {% endif %}
+    <p class="card-text">{{card.desc}}</p>
+</div>
+
