@@ -8,7 +8,7 @@
             {% for card in data %}
                 <div class="card">
                     <div class="card-header">{{card.name}}</div>
-                    {% include 'card_display.html' %}
+                    {% include 'include/card_display.html' %}
                 </div>
             {% endfor %}
         </div>
@@ -18,38 +18,7 @@
                 <div class="card">
                     <div class="card-header">Effect Check</div>
                     <div class="card-body">
-                        {% if 'normal' in card.frameType or '.' not in card.desc %}
-                        <strong>No Effect</strong>
-                        {% else %}
-                            {% for desc in desc_list %}    
-                                <p><span class="circle-icon">{{loop.index}}</span> Effect:
-                                    {% if 'condition' in desc %}
-                                       <br><strong>Condition</strong> <br> {{desc.condition}}
-                                       {% if 'cost' in desc %}
-                                       <br><strong>Cost</strong> <br> {{desc.cost}}
-                                   {% endif %}
-                                    {% endif %}
-
-
-                                    
-                                    {% if 'act' in desc %}
-
-                                        {% if '●' in desc.act %}
-                                            <br><strong>Activation</strong>
-                                            {% for line in desc.act.split('●') %}
-                                                {% if line|trim %}
-                                                    <br>● {{ line|trim }} 
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% else %}
-                                            <br><strong>Activation</strong>                                         
-                                            <br>{{desc.act}}
-                                        {% endif %}
-
-                                    {% endif %}
-                                </p>
-                            {% endfor %}
-                        {% endif %}
+                        {% include 'include/desc.html' %}
                     </div>
                 </div>
             {% endfor %}

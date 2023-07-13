@@ -1,0 +1,34 @@
+<!-- Yu-Gi-Oh Description Functions  -->
+{% if 'normal' in card.frameType or '.' not in card.desc %}
+<strong>No Effect</strong>
+{% else %}
+{% for desc in desc_list %}    
+    <p><span class="circle-icon">{{loop.index}}</span> Effect:
+        {% if 'condition' in desc %}
+           <br><strong>Condition</strong> <br> {{desc.condition}}
+        {% endif %}
+
+        {% if 'cost' in desc %}
+            <br><strong>Cost</strong> <br> {{desc.cost}}
+        {% endif %}
+        
+        {% if 'act' in desc %}
+
+            {% if '●' in desc.act %}
+                <br><strong>Activation</strong>
+                {% for line in desc.act.split('●') %}
+                    {% if line|trim %}
+                        <br>● {{ line|trim }} 
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% if 'condition' is not in desc and 'cost' is not in desc %}
+                {% else %}
+                <br><strong>Activation</strong>
+                {% endif %}                                         
+                <br>{{desc.act}}
+            {% endif %}
+        {% endif %}
+    </p>
+{% endfor %}
+{% endif %}
