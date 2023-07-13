@@ -56,8 +56,6 @@ def do_logout():
     if CURR_LOGIN_KEY in session:
         del session[CURR_LOGIN_KEY]
 
-
-
 @app.route('/')
 def homepage():
     return render_template('/index.html')
@@ -108,10 +106,6 @@ def logout():
     do_logout()
     flash('Logout successfully', 'success')
     return redirect('/')
-
-
-# Card functions
-
 
 # Card API Route
 @app.route('/cards')

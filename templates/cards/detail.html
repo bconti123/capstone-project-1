@@ -1,29 +1,29 @@
 {% extends "index.html" %}
+<!-- Title -->
 {% block title %}Detail - {{data[0].name}} {% endblock %}
+<!-- Listing -->
 {% block listing %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            {% for card in data %}
-                <div class="card">
-                    <div class="card-header">{{card.name}}</div>
-                    {% include 'include/card_display.html' %}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="col-sm-6">
-            {% for card in data %}
-                <div class="card">
-                    <div class="card-header">Effect Check</div>
-                    <div class="card-body">
-                        {% include 'include/desc.html' %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+  <div class="row">
+    <div class="col-sm-6">
+      {% for card in data %}
+      <div class="card">
+        <div class="card-header">{{card.name}}</div>
+        {% include 'include/card_display.html' %}
+      </div>
+      {% endfor %}
     </div>
+
+    <div class="col-sm-6">
+      {% for card in data %}
+      <div class="card">
+        <div class="card-header">Effect Check</div>
+        <div class="card-body">{% include 'include/desc.html' %}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 {% endblock %}

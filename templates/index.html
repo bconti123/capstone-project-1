@@ -1,16 +1,17 @@
 {% extends "base.html" %}
+<!-- Content -->
 {% block content %}
 
 <div class="container">
-    <h1> YGOEffectChecker </h1>
-    <form action="/cards" methods="GET">
-        <div class="input-group mb-5">
-        <input class="form-control sm" type="text" id="search" name="search">
-        <button class="btn btn-primary">Search</button>
-        </div>
-    </form>
-    {% block listing %}
-    <!-- Listing Here -->
-    {% endblock %}
+  <h1>YGOEffectChecker</h1>
+  <form action="/cards" methods="GET">
+    <div class="input-group mb-5">
+      <input class="form-control sm" type="text" id="search" name="search" />
+      <button class="btn btn-primary">Search</button>
+    </div>
+  </form>
+  {% block listing %}
+  <!-- Listing Here -->
+  {% endblock %}
 </div>
 {% endblock %}

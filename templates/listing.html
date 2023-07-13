@@ -1,4 +1,5 @@
 {% extends 'index.html' %}
+<!-- block listing -->
 {% block listing %}
 <div class="list-group">
   {% if data|length == 0 %}
@@ -7,6 +8,7 @@
     <div class="card-header"><strong>No Card in Database</strong></div>
   </div>
   {% else %}
+  <!-- Check the list if it has card -->
     {% for card in data %}
     <div class="card">
       <div class="card-header">{{card.name}}</div>
