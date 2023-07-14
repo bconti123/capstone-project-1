@@ -10,7 +10,19 @@
       {% for card in data %}
       <div class="card">
         <div class="card-header">{{card.name}}</div>
-        {% include 'include/card_display.html' %}
+        <div class="card-body">
+          <div class="row">
+            <div class="col text-center">
+              <img
+                src="https://res.cloudinary.com/ds6bap5si/card-images/{{card.id}}.jpg"
+                alt="{{card.name}}"
+                width="300"
+              />
+            </div>
+          </div>
+<br>
+          <div class="row">{% include 'include/card_display.html' %}</div>
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -19,7 +31,10 @@
       {% for card in data %}
       <div class="card">
         <div class="card-header">Effect Check</div>
-        <div class="card-body">{% include 'include/desc.html' %}</div>
+        <div class="card-body">
+          <!-- include -->
+          {% include 'include/desc.html' %}
+        </div>
       </div>
       {% endfor %}
     </div>

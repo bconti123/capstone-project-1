@@ -3,21 +3,30 @@
 {% block listing %}
 <div class="list-group">
   {% if data|length == 0 %}
-  
+
   <div class="card">
     <div class="card-header"><strong>No Card in Database</strong></div>
   </div>
   {% else %}
   <!-- Check the list if it has card -->
-    {% for card in data %}
-    <div class="card">
-      <div class="card-header">{{card.name}}</div>
-      <a href="/cards/{{card.id}}" class="list-group-item list-group-item-action">
-        {% include 'include/card_display.html' %}
-      </a>
-    </div>
-    {% endfor %}
-  {% endif %}
+  {% for card in data %}
+  <div class="card">
+    <div class="card-header">{{card.name}}</div>
+    <a href="/cards/{{card.id}}" class="list-group-item list-group-item-action">
+      <div class="card-body">
+        <div class="row align-items-start">
+          <div class="col-lg-3">
+            <img
+              src="https://res.cloudinary.com/ds6bap5si/card-images/{{card.id}}.jpg"
+              alt="{{card.name}}"
+              width="200"
+            />
+          </div>
+          <div class="col-lg-9">{% include 'include/card_display.html' %}</div>
+        </div>
+      </div>
+    </a>
+  </div>
+  {% endfor %} {% endif %}
 </div>
 {% endblock %}
-

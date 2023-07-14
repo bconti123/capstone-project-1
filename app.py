@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from forms import SearchForm, UserAddForm, LoginForm
 from models import db, connect_db, User, View
 from sqlalchemy.exc import IntegrityError
-from ygo import find_card_desc, find_card_id, search_card
+from ygo import find_card_desc, find_card_id, search_card, IMAGE_API_KEY
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'

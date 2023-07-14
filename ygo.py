@@ -36,8 +36,7 @@ def find_card_desc(card):
     cond_obj = {}
     cost_obj = {}
     act_obj = {}
-    # if ('toss a coin:' in desc_list):
-    #     desc_list = [' '.join(desc_list)]
+    
     for desc in desc_list:
 
         if ":" in desc:
