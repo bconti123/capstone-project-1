@@ -1,6 +1,7 @@
 import requests
 
 BASE_API_KEY = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
+IMAGE_API_KEY = 'https://res.cloudinary.com/ds6bap5si/card-images'
 
 def search_card(card):
     try: 
@@ -55,8 +56,6 @@ def find_card_desc(card):
             desc = desc.replace(substring, '')
         else:
             cost_obj = {}
-
-        
         
         act_obj = {'act': desc}
 
@@ -64,3 +63,4 @@ def find_card_desc(card):
         result_list.append({**cond_obj, **cost_obj, **act_obj})
 
     return result_list
+

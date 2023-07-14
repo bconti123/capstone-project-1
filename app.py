@@ -5,12 +5,10 @@ from flask_debugtoolbar import DebugToolbarExtension
 from forms import SearchForm, UserAddForm, LoginForm
 from models import db, connect_db, User, View
 from sqlalchemy.exc import IntegrityError
-from ygo import BASE_API_KEY, find_card_desc, find_card_id, search_card
-
+from ygo import find_card_desc, find_card_id, search_card
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
-
 
 app = Flask(__name__)
 app.app_context().push() # Flask latest version does need this.
@@ -56,6 +54,7 @@ def do_logout():
     if CURR_LOGIN_KEY in session:
         del session[CURR_LOGIN_KEY]
 
+# Homepage Route #
 @app.route('/')
 def homepage():
     return render_template('/index.html')
