@@ -36,7 +36,7 @@ def find_card_desc(card):
     cond_obj = {}
     cost_obj = {}
     act_obj = {}
-    
+
     for desc in desc_list:
 
         if ":" in desc:
@@ -56,7 +56,10 @@ def find_card_desc(card):
         else:
             cost_obj = {}
         
-        act_obj = {'act': desc}
+        if "." not in desc:
+            act_obj = {'act': desc + "."}
+        else:
+            act_obj = {'act' : desc}
 
         # ISSUES: dot '●', Fix it later.
         result_list.append({**cond_obj, **cost_obj, **act_obj})
