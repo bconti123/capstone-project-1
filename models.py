@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
 from sqlalchemy import text
+from sqlalchemy.exc import NoResultFound, IntegrityError
 
 date_today = datetime.today()
 
@@ -74,31 +75,47 @@ class View(db.Model):
     created_at = db.Column(db.DateTime, default=date_today)
 
 
-    # @classmethod
-    # def every_two_hours(cls, user_id, card_api_id):
-    #     query = text('''SELECT * FROM views
-    #                  WHERE user_id= :user_id
-    #                  AND card_api_id = :card_api_id
-    #                  ORDER BY created_at DESC
-    #                  LIMIT 1''')
-    #     result = db.session.execute(query, 
-    #                                 {'user_id':user_id, 
-    #                                  'card_api_id':card_api_id})
-    #     two_h = result.scalar_one()
-    #     return two_h
+    @classmethod
+    def every_two_hours(cls, user_id, card_api_id):
+        try:
+            query = text('''SELECT * FROM views
+                        WHERE user_id= :user_id
+                        AND card_api_id = :card_api_id
+                        ORDER BY created_at DESC
+                        LIMIT 1''')
+            result = db.session.execute(query, 
+                                        {'user_id':user_id, 
+                                        'card_api_id':card_api_id})
+            row = result.fetchone()
+            if row is not None:
+                two_h = row.created_at
+                return two_h
+        except NoResultFound:
+            db.session.rollback()
+            raise
     
     @classmethod
     def seen_card(cls, user_id, card_api_id):
-        # two_h = cls.every_two_hours(user_id, card_api_id)
+        try:
+            two_h = cls.every_two_hours(user_id, card_api_id)
+            if two_h is None or datetime.now() - two_h > timedelta(hours=2):
+                seen = View(card_api_id=card_api_id,
+                            user_id=user_id)
+                
+                db.session.add(seen)
+                db.session.commit()
+            else:
+                pass
+        except NoResultFound:
+            try:
+                seen = View(card_api_id=card_api_id,
+                            user_id=user_id)
+                db.session.add(seen)
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+                raise
 
-        # if two_h is None or datetime.now() - two_h > timedelta(hours=2):
-        seen = View(card_api_id=card_api_id,
-                    user_id=user_id)
-        
-        db.session.add(seen)
-        db.session.commit()
-        # else:
-        #     pass
 
 class Comment(db.Model):
     """ Comment """
