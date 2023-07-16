@@ -13,10 +13,16 @@
     <script src="https://unpkg.com/bootstrap"></script>
     <link rel="stylesheet" href="/static/css/app.css" />
     <link rel="shortcut icon" href="/static/favicon.ico" />
+    <script src="/static/js/app.js"></script>
   </head>
   <body>
     {% include 'include/nav.html' %}
     <div class="container">
+      {% for category, message in get_flashed_messages(with_categories=True) %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}
+        <button class="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="float:right">&times;</span></button>
+      </div>
+      {% endfor %}
       {% block content %}
       <!-- Content Here -->
       {% endblock %}
