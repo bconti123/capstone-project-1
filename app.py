@@ -116,5 +116,7 @@ def card_search():
 def card_show(card_id):
     card = find_card_id(card_id)
     desc_list = find_card_desc(card)
+    user_id = session[CURR_USER_KEY] or session[CURR_LOGIN_KEY]
+    View.seen_card(user_id, card_id)
 
     return render_template('/cards/detail.html', data=card, desc_list=desc_list)

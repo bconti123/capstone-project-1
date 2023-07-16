@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
+from sqlalchemy import text
 
 date_today = datetime.today()
 
@@ -64,22 +65,40 @@ class User(db.Model):
             
         return False
 
-class Images(db.Model):
-    """ Image """
-    __tablename__ = 'images'
-    id = db.Column(db.Integer, primary_key=True)
-    card_api_id = db.Column(db.Integer, nullable=False)
-    filename = db.Column(db.Text, nullable=False)
-    file_path = db.Column(db.Text, nullable=False)
-
 class View(db.Model):
     """ View """
     __tablename__ = 'views'
     id = db.Column(db.Integer, primary_key=True)
-    # card_id = db.Column(db.Integer, db.ForeignKey('cards.id'))
     card_api_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=date_today)
+
+
+    # @classmethod
+    # def every_two_hours(cls, user_id, card_api_id):
+    #     query = text('''SELECT * FROM views
+    #                  WHERE user_id= :user_id
+    #                  AND card_api_id = :card_api_id
+    #                  ORDER BY created_at DESC
+    #                  LIMIT 1''')
+    #     result = db.session.execute(query, 
+    #                                 {'user_id':user_id, 
+    #                                  'card_api_id':card_api_id})
+    #     two_h = result.scalar_one()
+    #     return two_h
+    
+    @classmethod
+    def seen_card(cls, user_id, card_api_id):
+        # two_h = cls.every_two_hours(user_id, card_api_id)
+
+        # if two_h is None or datetime.now() - two_h > timedelta(hours=2):
+        seen = View(card_api_id=card_api_id,
+                    user_id=user_id)
+        
+        db.session.add(seen)
+        db.session.commit()
+        # else:
+        #     pass
 
 class Comment(db.Model):
     """ Comment """
