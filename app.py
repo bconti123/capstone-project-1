@@ -28,12 +28,12 @@ connect_db(app)
 
 db.create_all()
 
-@app.before_request
-def before_request_global():
-    """If visit any website routes, add guest user session to Flask global """
-    if not CURR_USER_KEY in session:
-        guest = User.guest_visit()
-        session[CURR_USER_KEY] = guest.id
+# @app.before_request
+# def before_request_global():
+    # """If visit any website routes, add guest user session to Flask global """
+    # if not CURR_USER_KEY in session:
+    #     guest = User.guest_visit()
+    #     session[CURR_USER_KEY] = guest.id
     # When logged user id and guest user id are same, delete guest user id in session.
 
 @app.before_request
@@ -54,6 +54,10 @@ def do_logout():
     if CURR_LOGIN_KEY in session:
         del session[CURR_LOGIN_KEY]
 
+    if not CURR_USER_KEY in session:
+        guest = User.guest_visit()
+        session[CURR_USER_KEY] = guest.id
+
 # Homepage Route #
 @app.route('/')
 def homepage():
@@ -62,6 +66,9 @@ def homepage():
 ### User Routes ###
 @app.route('/users/register', methods=['GET', 'POST'])
 def register():
+    if g.user:
+        flash("You're already logged in.", "danger")
+        return redirect('/')
     user_id = session[CURR_USER_KEY]
     form = UserAddForm()
 
@@ -85,7 +92,9 @@ def register():
 
 @app.route('/users/login', methods=['GET', 'POST'])
 def login():
-
+    if g.user:
+        flash("You're already logged in.", "danger")
+        return redirect('/')
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -102,6 +111,8 @@ def login():
 
 @app.route('/logout')
 def logout():
+    if not g.user:
+        flash('Access unauthorized.', 'danger')
     do_logout()
     flash('Logout successfully', 'success')
     return redirect('/')
@@ -114,6 +125,9 @@ def card_search():
 
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):
+    if not CURR_USER_KEY in session and not CURR_LOGIN_KEY in session:
+        guest = User.guest_visit()
+        session[CURR_USER_KEY] = guest.id
     card = find_card_id(card_id)
     desc_list = find_card_desc(card)
     user_id = session[CURR_USER_KEY] or session[CURR_LOGIN_KEY]

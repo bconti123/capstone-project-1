@@ -19,8 +19,8 @@
     {% include 'include/nav.html' %}
     <div class="container">
       {% for category, message in get_flashed_messages(with_categories=True) %}
-      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}
-        <button class="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="float:right">&times;</span></button>
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" id="div_flash">{{ message }}
+        <button class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></button>
       </div>
       {% endfor %}
       {% block content %}
