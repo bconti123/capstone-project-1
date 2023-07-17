@@ -8,25 +8,25 @@
            <br><strong>Condition</strong> <br> {{desc.condition}}
         {% endif %}
 
-        {% if 'cost' in desc %}
-            <br><strong>Cost</strong> <br> {{desc.cost}}
+        {% if 'act' in desc %}
+            <br><strong>Activation</strong> <br> {{desc.act}}
         {% endif %}
         
-        {% if 'act' in desc %}
+        {% if 'res' in desc %}
 
-            {% if '●' in desc.act %}
-                <br><strong>Activation</strong>
-                {% for line in desc.act.split('●') %}
+            {% if '●' in desc.res %}
+                <br><strong>Resolution</strong>
+                {% for line in desc.res.split('●') %}
                     {% if line|trim %}
                         <br>● {{ line|trim }} 
                     {% endif %}
                 {% endfor %}
             {% else %}
-                {% if 'condition' is not in desc and 'cost' is not in desc %}
+                {% if 'condition' is not in desc and 'act' is not in desc %}
                 {% else %}
-                <br><strong>Activation</strong>
+                <br><strong>Resolution</strong>
                 {% endif %}                                         
-                <br>{{desc.act}}
+                <br>{{desc.res}}
             {% endif %}
         {% endif %}
     </p>

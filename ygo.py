@@ -34,8 +34,8 @@ def find_card_desc(card):
     desc_list = card[0]['desc'].split('. ')
     result_list = []
     cond_obj = {}
-    cost_obj = {}
     act_obj = {}
+    res_obj = {}
 
     for desc in desc_list:
 
@@ -48,21 +48,21 @@ def find_card_desc(card):
             cond_obj = {}
 
         if ";" in desc:
-            cost = desc.index(";")
-            substring = desc[0:cost+1]
+            act = desc.index(";")
+            substring = desc[0:act+1]
         
-            cost_obj = {'cost' : substring}
+            act_obj = {'act' : substring}
             desc = desc.replace(substring, '')
         else:
-            cost_obj = {}
+            act_obj = {}
         
         if "." not in desc:
-            act_obj = {'act': desc + "."}
+            res_obj = {'res': desc + "."}
         else:
-            act_obj = {'act' : desc}
+            res_obj = {'res' : desc}
 
         # ISSUES: dot '●', Fix it later.
-        result_list.append({**cond_obj, **cost_obj, **act_obj})
+        result_list.append({**cond_obj, **act_obj, **res_obj})
 
     return result_list
 
