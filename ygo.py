@@ -15,8 +15,7 @@ def search_card(card):
     except (requests.exceptions.RequestException, ValueError) as e:
         print(f'Error: {e}')
         return []
-
-
+    
 def find_card_id(id):
     try: 
         response = requests.get(f'{BASE_API_KEY}?id={id}')
@@ -66,3 +65,12 @@ def find_card_desc(card):
 
     return result_list
 
+
+def page():
+    cards = search_card('Dark Magician')
+    per_page = 5
+    offset = (page - 1) ^ per_page
+
+    pag_cards = cards[offset:offset + per_page]
+
+    return pag_cards

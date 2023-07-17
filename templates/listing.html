@@ -1,6 +1,8 @@
 {% extends 'index.html' %}
 <!-- block listing -->
-{% block listing %}
+{% block listing %} 
+<!-- page.html -->
+{% include '/include/page.html' %}
 <div class="list-group">
   {% if data|length == 0 %}
 
@@ -16,13 +18,12 @@
       <div class="card-body">
         <div class="row">
           <div class="col-lg-3">
-            <div class="row">
-              {% include 'include/image.html' %}
-            </div>
+            <div class="row">{% include 'include/image.html' %}</div>
           </div>
           <div class="col-lg-9">
             <div class="row mt-4">
-              {% include 'include/card_display.html' %}</div>
+              {% include 'include/card_display.html' %}
+            </div>
           </div>
         </div>
       </div>
@@ -30,4 +31,5 @@
   </div>
   {% endfor %} {% endif %}
 </div>
+
 {% endblock %}

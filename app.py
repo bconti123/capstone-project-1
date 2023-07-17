@@ -6,6 +6,7 @@ from forms import SearchForm, UserAddForm, LoginForm
 from models import db, connect_db, User, View
 from sqlalchemy.exc import IntegrityError
 from ygo import find_card_desc, find_card_id, search_card, IMAGE_API_KEY
+from math import ceil
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
@@ -120,14 +121,25 @@ def logout():
 # Card API Route
 @app.route('/cards')
 def card_search():
-    cards = search_card(request.args.get('search'))
-    return render_template('/listing.html', data=cards)
+    page = request.args.get('page', 1, type=int)
+    search_term = request.args.get('search')
+    cards = search_card(search_term)
+
+    per_page = 10
+    total_pages = ceil(len(cards) / per_page)
+
+    offset = (page - 1) * per_page
+
+    paginated_cards = cards[offset:offset + per_page]
+
+    return render_template('/listing.html', data=paginated_cards, data_cards=cards, search_term=search_term, page=page, per_page=per_page, total_pages=total_pages)
 
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):
     if not CURR_USER_KEY in session and not CURR_LOGIN_KEY in session:
         guest = User.guest_visit()
         session[CURR_USER_KEY] = guest.id
+
     card = find_card_id(card_id)
     desc_list = find_card_desc(card)
     user_id = session[CURR_USER_KEY] or session[CURR_LOGIN_KEY]
