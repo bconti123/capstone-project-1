@@ -16,7 +16,7 @@
               {% include 'include/image.html' %}
             </div>
           </div>
-<br>
+          <br />
           <div class="row">{% include 'include/card_display.html' %}</div>
         </div>
       </div>
@@ -26,7 +26,14 @@
     <div class="col-sm-6">
       {% for card in data %}
       <div class="card">
-        <div class="card-header">Effect Check</div>
+        <div class="card-header">
+          <div class="row">
+            <div class="col">Effect Check</div>
+            <div class="col-auto">
+              <div class="float-right">Views: {{views|length}}</div>
+            </div>
+          </div>
+        </div>
         <div class="card-body">
           <!-- include -->
           {% include 'include/desc.html' %}

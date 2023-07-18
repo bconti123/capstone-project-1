@@ -160,4 +160,6 @@ def card_show(card_id):
         user_id = g.guest.id
     View.seen_card(user_id, card_id)
 
-    return render_template('/cards/detail.html', data=card, desc_list=desc_list)
+    views = db.session.query(View).filter_by(card_api_id=card_id).all()
+
+    return render_template('/cards/detail.html', data=card, desc_list=desc_list, views=views)
