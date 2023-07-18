@@ -11,9 +11,9 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        {% if session['curr_login_user'] %}
+    <div class="collapse navbar-collapse text-center" id="navbarNavDropdown">
+      <ul class="nav navbar-nav custom-navbar-nav">
+        {% if g.user %}
         <li class="nav-item">
           <a class="nav-link disable" href="#">Hi {{ g.user.username }}</a>
         </li>
@@ -28,7 +28,6 @@
           <a class="nav-link" href="/users/login">Login</a>
         </li>
         {% endif %}
-
       </ul>
     </div>
   </div>

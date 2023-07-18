@@ -1,10 +1,13 @@
 #user_form > .form-control {
-    margin: 0.75rem 0;
+  margin: 0.75rem 0;
 }
 
 .circle-icon {
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 25%;
-    padding: 1px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 25%;
+  padding: 1px;
+}
+.custom-navbar-nav {
+  margin-left: auto;
 }
