@@ -39,6 +39,11 @@ def add_g_user():
     else:
         g.user = None
 
+    if CURR_USER_KEY in session:
+        g.guest = db.session.get(User, session[CURR_USER_KEY])
+    else:
+        g.guest = None
+
 # Login and Logout functions    
 def do_login(user):
     session[CURR_LOGIN_KEY] = user.id
@@ -51,6 +56,11 @@ def do_logout():
         guest = User.guest_visit()
         session[CURR_USER_KEY] = guest.id
 
+def do_guest():
+    guest = User.guest_visit()
+    session[CURR_USER_KEY] = guest.id
+    return guest.id
+
 # Homepage Route #
 @app.route('/')
 def homepage():
@@ -62,7 +72,12 @@ def register():
     if g.user:
         flash("You're already logged in.", "danger")
         return redirect('/')
-    user_id = session[CURR_USER_KEY]
+    
+    if g.guest:
+        user_id = g.guest.id
+    else:
+        user_id = do_guest()
+
     form = UserAddForm()
 
     if form.validate_on_submit():
@@ -133,13 +148,16 @@ def card_search():
 
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):
-    if not CURR_USER_KEY in session and not CURR_LOGIN_KEY in session:
+    if not g.guest and not g.user:
         guest = User.guest_visit()
         session[CURR_USER_KEY] = guest.id
 
     card = find_card_id(card_id)
     desc_list = find_card_desc(card)
-    user_id = session[CURR_USER_KEY] or session[CURR_LOGIN_KEY]
+    if g.user:
+        user_id = g.user.id
+    else:
+        user_id = g.guest.id
     View.seen_card(user_id, card_id)
 
     return render_template('/cards/detail.html', data=card, desc_list=desc_list)
