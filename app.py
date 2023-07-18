@@ -20,9 +20,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "e744ce481172b1146d2e78fe190385aa")
 
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-# app.config['FLASK_DEBUG'] = True
-# toolbar = DebugToolbarExtension(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['FLASK_DEBUG'] = True
+toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -161,7 +161,7 @@ def card_show(card_id):
     if g.user:
         user_id = g.user.id
     else:
-        user_id = g.guest.id
+        user_id = session[CURR_USER_KEY]
     View.seen_card(user_id, card_id)
 
     views = db.session.query(View).filter_by(card_api_id=card_id).all()
