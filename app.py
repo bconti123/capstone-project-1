@@ -2,10 +2,10 @@ import os
 
 from flask import Flask, render_template, session, g, flash, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import SearchForm, UserAddForm, LoginForm
+from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, View
 from sqlalchemy.exc import IntegrityError
-from ygo import find_card_desc, find_card_id, search_card, IMAGE_API_KEY
+from ygo import find_card_desc, find_card_id, search_card
 from math import ceil
 
 CURR_USER_KEY = 'curr_user'
@@ -28,14 +28,6 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 
 db.create_all()
-
-# @app.before_request
-# def before_request_global():
-    # """If visit any website routes, add guest user session to Flask global """
-    # if not CURR_USER_KEY in session:
-    #     guest = User.guest_visit()
-    #     session[CURR_USER_KEY] = guest.id
-    # When logged user id and guest user id are same, delete guest user id in session.
 
 @app.before_request
 def add_g_user():
@@ -127,12 +119,17 @@ def card_search():
 
     per_page = 10
     total_pages = ceil(len(cards) / per_page)
-
     offset = (page - 1) * per_page
 
     paginated_cards = cards[offset:offset + per_page]
 
-    return render_template('/listing.html', data=paginated_cards, data_cards=cards, search_term=search_term, page=page, per_page=per_page, total_pages=total_pages)
+    return render_template('/listing.html',
+                            data=paginated_cards, 
+                            data_cards=cards, 
+                            search_term=search_term, 
+                            page=page, 
+                            per_page=per_page, 
+                            total_pages=total_pages)
 
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):

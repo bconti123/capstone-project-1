@@ -1,8 +1,7 @@
 <!--Pagination Links  -->
-<h3>Page: {{page}} of {{total_pages}}</h3>
-<h3>Card Total: {{ page * per_page }} of {{data_cards |length}}</h3>
 <nav>
-  <ul class="pagination">
+  <p class="text-center"><strong> Card Total: {{ page * per_page }} of {{data_cards |length}} - Page: {{page}} of {{total_pages}}</strong></p>
+  <ul class="pagination flex-wrap">
     {% if page > 1 %}
     <li class="page-item">
       <a

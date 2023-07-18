@@ -1,8 +1,10 @@
 {% extends 'index.html' %}
 <!-- block listing -->
-{% block listing %} 
+{% block listing %}
 <!-- page.html -->
+
 {% include '/include/page.html' %}
+
 <div class="list-group">
   {% if data|length == 0 %}
 
@@ -29,7 +31,11 @@
       </div>
     </a>
   </div>
-  {% endfor %} {% endif %}
+  {% endfor %}
+  
+  {% include '/include/page.html' %}
+  <!-- endif -->
+  {% endif %}
 </div>
 
 {% endblock %}
