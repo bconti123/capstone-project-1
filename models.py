@@ -26,6 +26,8 @@ class User(db.Model):
     isGuest = db.Column(db.Boolean, default=True)
 
     comments = db.relationship("Comment", backref='user', cascade="all, delete-orphan")
+    # favorites = db.relationship("Favorite", backref='user', cascade="all, delete-orphan")
+
 
     def __repr__(self):
         if self.isGuest:
@@ -125,3 +127,10 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     context = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=date_today)
+
+# class Favorite(db.Model):
+#     """ User's favorite card """
+#     __tablename__ = 'favorites'
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     card_api_id = db.Column(db.Integer, nullable=False)

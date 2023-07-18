@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, render_template, session, g, flash, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import UserAddForm, LoginForm
@@ -19,11 +18,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "e744ce481172b1146d2e78fe190385aa")
 
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['FLASK_DEBUG'] = True
-toolbar = DebugToolbarExtension(app)
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+# app.config['FLASK_DEBUG'] = True
+# toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -69,6 +68,7 @@ def homepage():
 ### User Routes ###
 @app.route('/users/register', methods=['GET', 'POST'])
 def register():
+    """ For user, register account """
     if g.user:
         flash("You're already logged in.", "danger")
         return redirect('/')
@@ -100,6 +100,7 @@ def register():
 
 @app.route('/users/login', methods=['GET', 'POST'])
 def login():
+    """ User log in """
     if g.user:
         flash("You're already logged in.", "danger")
         return redirect('/')
@@ -119,6 +120,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+    """ User log out"""
     if not g.user:
         flash('Access unauthorized.', 'danger')
     do_logout()
@@ -128,6 +130,7 @@ def logout():
 # Card API Route
 @app.route('/cards')
 def card_search():
+    """ Search cards from YGO API and Pagination """
     page = request.args.get('page', 1, type=int)
     search_term = request.args.get('search')
     cards = search_card(search_term)
@@ -148,6 +151,7 @@ def card_search():
 
 @app.route('/cards/<int:card_id>')
 def card_show(card_id):
+    """ Show Card Detail """
     if not g.guest and not g.user:
         guest = User.guest_visit()
         session[CURR_USER_KEY] = guest.id
