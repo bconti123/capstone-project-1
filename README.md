@@ -14,6 +14,7 @@ Website URL: https://yugioh-eff-checker.onrender.com/
 **Comprehensive Card Data:** The website retrieves card information using the YGOProDeck API, ensuring that the database is up-to-date with the latest card releases and rulings.
 
 **Cloudinary Integration:** To enhance performance, all card images are downloaded and stored on Cloudinary, a reliable cloud API, ensuring smooth and fast loading times.
+> I wrote function carefully in Python for download all images from YGOPRODeck API. Download image per 0.5 second or 1 second by setting up time.sleep(0.5) or time.sleep(1). I don't want to stress server.
 
 **You try this out**
 1. Find the card titled **"Magic Cylinder"**. 
@@ -27,4 +28,10 @@ You notice **Effect Checker** that it display **Condition**, **Activation**, and
 # Database Schema Design
 ![Database_Schema_Design](/Database-Schemas/DatabaseSchemaDesign-2.png)
 
-**Tech Slack Used**: Python, Flask, Bootstrap, HTML/CSS, PostgreSQL, Render, Cloudinary
+**Tech Slack Used:** 
+Python 3.8.10
+Flask as a framework
+Bootstrap
+PostgreSQL
+Render as website hosting service
+Cloudinary as a Cloud API service
