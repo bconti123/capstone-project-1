@@ -29,9 +29,9 @@ You notice **Effect Checker** that it display **Condition**, **Activation**, and
 ![Database_Schema_Design](/Database-Schemas/DatabaseSchemaDesign-2.png)
 
 **Tech Slack Used:** 
-Python 3.8.10
-Flask as a framework
-Bootstrap
-PostgreSQL
-Render as website hosting service
-Cloudinary as a Cloud API service
+- Python 3.8.10
+- Flask as a framework
+- Bootstrap
+- PostgreSQL
+- Render as website hosting service
+- Cloudinary as a Cloud API service
