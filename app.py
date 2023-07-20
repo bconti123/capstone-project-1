@@ -1,12 +1,10 @@
 import os
 from flask import Flask, render_template, session, g, flash, redirect, request, url_for
-from flask_debugtoolbar import DebugToolbarExtension
 from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, View, Comment
 from sqlalchemy.exc import IntegrityError
 from ygo import find_card_desc, find_card_id, search_card
 from math import ceil
-from datetime import datetime
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
