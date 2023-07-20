@@ -1,11 +1,12 @@
 import os
-from flask import Flask, render_template, session, g, flash, redirect, request
+from flask import Flask, render_template, session, g, flash, redirect, request, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import UserAddForm, LoginForm
-from models import db, connect_db, User, View
+from models import db, connect_db, User, View, Comment
 from sqlalchemy.exc import IntegrityError
 from ygo import find_card_desc, find_card_id, search_card
 from math import ceil
+from datetime import datetime
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
@@ -166,4 +167,29 @@ def card_show(card_id):
 
     views = db.session.query(View).filter_by(card_api_id=card_id).all()
 
-    return render_template('/cards/detail.html', data=card, desc_list=desc_list, views=views)
+    com_list = db.session.query(Comment).filter_by(card_api_id=card_id).all()
+
+    for comment in com_list:
+        comment.created_at = comment.created_at.strftime('%B %d, %Y - %I:%M %p')
+
+    return render_template('/cards/detail.html', 
+                           data=card, 
+                           desc_list=desc_list, 
+                           views=views,
+                           com_list=com_list)
+
+@app.route('/cards/<int:card_id>/add_comment', methods=['POST'])
+def add_commment(card_id):
+    """ User adds Comment """
+
+    if not g.user:
+        flash('Access unauthorized.', 'danger')
+        return redirect(url_for('card_show', card_id=card_id))
+    
+    context = request.form['comment']
+    comment = Comment(card_api_id=card_id,
+                        user_id=g.user.id,
+                        context=context)
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('card_show', card_id=card_id))

@@ -1,65 +1,46 @@
-<form>
+<form action="/cards/{{data[0].id}}/add_comment" method="POST">
   <div class="row mt-3">
     <div class="col">
       <div class="form-group">
         <div class="mb-3">
-          <label for="comment" class="form-label text-white"
-            >Add Comment</label
-          >
+          <label for="comment" class="form-label text-white">Add Comment</label>
+          {% if 'curr_login_user' is not in session %}
+          <div class="card">
+            <span class=" text-center pt-5 pb-5"><a href="/users/login" class="link-dark">Login</a> to join the discussion!</span>
+          </div>
+          {% else %}
           <textarea
             class="form-control"
             id="comment"
+            name="comment"
             rows="3"
           ></textarea>
+          <button class="btn btn-primary btn-sm mt-3">submit</button>
+          {% endif %}
         </div>
       </div>
     </div>
-    
   </div>
-  <button class="btn btn-primary btn-sm">submit</button>
 </form>
-<div class="card">
-    <h1 class="card-title">Comments</h1>
-</div>
 
 <div class="be-comment-block">
-  <h1 class="comments-title">Comments (3)</h1>
+  {% if com_list | length == 0 %}
+  <h1 class="comments-title">No Comment</h1>
+  {% else %}
+  <h1 class="comments-title">Comments ({{ com_list | length }})</h1>
   <div class="be-comment">
-    <div class="be-img-comment"></div>
-    <div class="be-comment-content">
-      <span class="be-comment-name">
-        <a href="blog-detail-2.html">Ravi Sah</a>
-      </span>
-      <span class="be-comment-time">
-        <i class="fa fa-clock-o"></i>
-        May 27, 2015 at 3:14am
-      </span>
+    {% for comment in com_list %}
+    <!-- <div class="be-img-comment"></div> -->
 
-      <p class="be-comment-text">
-        Pellentesque gravida tristique ultrices. Sed blandit varius mauris, vel
-        volutpat urna hendrerit id. Curabitur rutrum dolor gravida turpis
-        tristique efficitur.
-      </p>
-    </div>
-  </div>
+    <span class="be-comment-name text-white">{{comment.user.username}}</span>
+    <span class="be-comment-time">
+      <i class="fa fa-clock-o"></i>
+      {{ comment.created_at }}
+    </span>
 
-  <div class="be-comment">
-    <div class="be-img-comment"></div>
-    <div class="be-comment-content">
-      <span class="be-comment-name">
-        <a href="blog-detail-2.html">Phoenix, the Creative Studio</a>
-      </span>
-      <span class="be-comment-time">
-        <i class="fa fa-clock-o"></i>
-        May 27, 2015 at 3:14am
-      </span>
-      <p class="be-comment-text">
-        Nunc ornare sed dolor sed mattis. In scelerisque dui a arcu mattis, at
-        maximus eros commodo. Cras magna nunc, cursus lobortis luctus at,
-        sollicitudin vel neque. Duis eleifend lorem non ant. Proin ut ornare
-        lectus, vel eleifend est. Fusce hendrerit dui in turpis tristique
-        blandit.
-      </p>
-    </div>
+    <p class="be-comment-text">{{ comment.context }}</p>
+
+    {% endfor %}
   </div>
+  {% endif %}
 </div>
