@@ -11,8 +11,13 @@ CURR_LOGIN_KEY = 'curr_login_user'
 
 app = Flask(__name__)
 app.app_context().push() # Flask latest version does need this.
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    os.environ.get('DATABASE_URL', 'postgresql:///yugioh_eff_checker'))
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "Its a secret :)")
+
 
 connect_db(app)
 
