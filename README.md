@@ -24,5 +24,7 @@ Website URL: https://yugioh-eff-checker.onrender.com/
 You notice **Effect Checker** that it display **Condition**, **Activation**, and **Resolution**. You want to learn more about PSCT (https://yugiohblog.konami.com/articles/?p=4514#more-4514)
 ### YGOProDeck API: https://ygoprodeck.com/api-guide/
 
+# Database Schema Design
+![Database_Schema_Design](/Database-Schemas/DatabaseSchemaDesign-2.png)
 
 **Tech Slack Used**: Python, Flask, Bootstrap, HTML/CSS, PostgreSQL, Render, Cloudinary
