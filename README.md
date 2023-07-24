@@ -5,6 +5,7 @@ YGOEffectChecker is a website designed to provide users with the ability to quic
 This website retrieve card information in data from YGOProDeck API. I used Python to download all card images in data from YGOProDeck API to my own cloud API that called Cloudinary (https://cloudinary.com/).
 
 Website URL: [https://yugioh-eff-checker.onrender.com/](https://yugioh-eff-checker.onrender.com/){:target="_blank"}
+<a href="https://yugioh-eff-checker.onrender.com/" target="_blank">Link text</a>
 
 ![YGO_EFF_CHECKER_Search](/static/images/search.png)
 
