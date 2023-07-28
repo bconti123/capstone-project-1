@@ -5,6 +5,7 @@ from models import db, connect_db, User, View, Comment
 from sqlalchemy.exc import IntegrityError
 from ygo import find_card_desc, find_card_id, search_card
 from math import ceil
+from flask_debugtoolbar import DebugToolbarExtension
 
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
@@ -18,6 +19,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "Its a secret :)")
 
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['FLASK_DEBUG'] = True
+toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
