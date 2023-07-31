@@ -133,7 +133,7 @@ class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
-    reply_to = db.Column(db.Integer, db.ForeignKey('replies.id')) or None
+    reply_to = db.Column(db.Integer, db.ForeignKey('replies.id'))
     context = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.today())
 
@@ -144,8 +144,8 @@ class Reply(db.Model):
         db.session.commit()
     
     @classmethod
-    def reply_to_reply(cls, comment_id, user_id, context):
-        reply = Reply(user_id=user_id, comment_id=comment_id, reply_to=reply_to, context=context)
+    def reply_comment(cls, comment_id, user_id, context):
+        reply = Reply(user_id=user_id, comment_id=comment_id, reply_to=None, context=context)
         db.session.add(reply)
         db.session.commit()
 

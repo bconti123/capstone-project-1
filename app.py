@@ -192,3 +192,13 @@ def add_commment(card_id):
     db.session.add(comment)
     db.session.commit()
     return redirect(url_for('card_show', card_id=card_id))
+
+@app.route('/cards/<int:card_id>/<int:comment_id>/add_reply', methods=['POST'])
+def add_reply(card_id, comment_id):
+    """ User adds Reply Comment"""
+
+    if not g.user:
+        flash('Access unauthorized.', 'danger')
+        return redirect(url_for('card_show', card_id=card_id))
+    
+    

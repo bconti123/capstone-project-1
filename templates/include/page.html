@@ -1,7 +1,13 @@
 <!--Pagination Links  -->
 <nav>
-  <p class="text-center text-white"><strong> Card Total: {{ page * per_page }} of {{data_cards |length}} - Page: {{page}} of {{total_pages}}</strong></p>
-  <ul class="pagination flex-wrap">
+  <p class="text-center text-white">
+    <strong>
+      Card Total: {{ page * per_page }} of {{data_cards |length}} - Page:
+      {{page}} of {{total_pages}}</strong
+    >
+  </p>
+  <ul class="pagination justify-content-center flex-wrap">
+    <!-- Previous Page -->
     {% if page > 1 %}
     <li class="page-item">
       <a
@@ -10,15 +16,50 @@
         >Previous</a
       >
     </li>
-    {% endif %} {% for num in range(1, total_pages + 1) %}
-    <li class="page-item{% if num == page %} active {% endif %}">
-      <a
-        class="page-link"
-        href="/cards?page={{ num }}&search={{ search_term }}"
-        >{{ num }}</a
-      >
+    {% endif %}
+
+    <!-- First Page -->
+    {% if page > 3 %}
+    <li class="page-item">
+      <a class="page-link" href="/cards?page=1&search={{ search_term }}">1</a>
     </li>
+    {% endif %}
+
+    <!-- Ellipsis before current page(s) -->
+    {% if page > 4 %}
+    <li class="page-item disabled">
+      <span class="page-link">...</span>
+    </li>
+    {% endif %}
+
+
+    <!-- Pagination Pages -->
+    {% for num in range(1, total_pages + 1) %}
+    {% set page_start = (page - 2) if (page - 2) >= 1 else 1 %}
+    {% set page_end = (page + 2) if (page + 2) <= total_pages else total_pages %}
+    {% if num >= page_start and num <= page_end %}
+    <li class="page-item{% if num == page %} active {% endif %}">
+      <a class="page-link" href="/cards?page={{ num }}&search={{ search_term }}">{{ num }}</a>
+    </li>
+    {% endif %}
     {% endfor %}
+
+    <!-- Ellipsis after current page(s) -->
+    {% if page < total_pages - 3 %}
+    <li class="page-item disabled">
+      <span class="page-link">...</span>
+    </li>
+    {% endif %}
+
+    <!-- Last Page -->
+    {% if page < total_pages - 2 %}
+    <li class="page-item">
+      <a class="page-link" href="/cards?page={{ total_pages }}&search={{ search_term }}">{{ total_pages }}</a>
+    </li>
+    {% endif %}
+
+
+    <!-- Next Page -->
     {% if data|length == per_page %}
     <li class="page-item">
       <a
