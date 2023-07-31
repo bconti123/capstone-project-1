@@ -5,6 +5,7 @@ from models import db, connect_db, User, View, Comment
 from sqlalchemy.exc import IntegrityError
 from ygo import find_card_desc, find_card_id, search_card
 from math import ceil
+
 from flask_debugtoolbar import DebugToolbarExtension
 
 CURR_USER_KEY = 'curr_user'
@@ -164,8 +165,8 @@ def card_show(card_id):
     View.seen_card(user_id, card_id)
 
     views = db.session.query(View).filter_by(card_api_id=card_id).all()
-
-    com_list = db.session.query(Comment).filter_by(card_api_id=card_id).all()
+    
+    com_list = db.session.query(Comment).filter_by(card_api_id=card_id).order_by(Comment.created_at.desc(), Comment.id.desc()).all()
 
     for comment in com_list:
         comment.created_at = comment.created_at.strftime('%B %d, %Y - %I:%M %p')
