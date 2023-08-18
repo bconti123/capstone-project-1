@@ -4,10 +4,9 @@ from datetime import datetime, timedelta
 from sqlalchemy import text
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
-date_today = datetime.today()
-
 bcrypt = Bcrypt()
 db = SQLAlchemy()
+
 
 def connect_db(app):
     """Connect this database to provided Flask App"""
@@ -74,7 +73,7 @@ class View(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     card_api_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    created_at = db.Column(db.DateTime, default=date_today)
+    created_at = db.Column(db.DateTime, default=datetime.today())
 
 
     @classmethod
@@ -126,7 +125,30 @@ class Comment(db.Model):
     card_api_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     context = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=date_today)
+    created_at = db.Column(db.DateTime, default=datetime.today())
+
+class Reply(db.Model):
+    """ Reply """
+    __tablename__ = 'replies'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
+    reply_to = db.Column(db.Integer, db.ForeignKey('replies.id'))
+    context = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.today())
+
+    @classmethod
+    def reply_to_reply(cls, comment_id, user_id, reply_to, context):
+        reply = Reply(user_id=user_id, comment_id=comment_id, reply_to=reply_to, context=context)
+        db.session.add(reply)
+        db.session.commit()
+    
+    @classmethod
+    def reply_comment(cls, comment_id, user_id, context):
+        reply = Reply(user_id=user_id, comment_id=comment_id, reply_to=None, context=context)
+        db.session.add(reply)
+        db.session.commit()
+
 
 # class Favorite(db.Model):
 #     """ User's favorite card """

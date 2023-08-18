@@ -6,6 +6,8 @@ from sqlalchemy.exc import IntegrityError
 from ygo import find_card_desc, find_card_id, search_card
 from math import ceil
 
+from flask_debugtoolbar import DebugToolbarExtension
+
 CURR_USER_KEY = 'curr_user'
 CURR_LOGIN_KEY = 'curr_login_user'
 
@@ -18,6 +20,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "Its a secret :)")
 
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['FLASK_DEBUG'] = True
+toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -160,8 +165,8 @@ def card_show(card_id):
     View.seen_card(user_id, card_id)
 
     views = db.session.query(View).filter_by(card_api_id=card_id).all()
-
-    com_list = db.session.query(Comment).filter_by(card_api_id=card_id).all()
+    
+    com_list = db.session.query(Comment).filter_by(card_api_id=card_id).order_by(Comment.created_at.desc(), Comment.id.desc()).all()
 
     for comment in com_list:
         comment.created_at = comment.created_at.strftime('%B %d, %Y - %I:%M %p')
@@ -187,3 +192,13 @@ def add_commment(card_id):
     db.session.add(comment)
     db.session.commit()
     return redirect(url_for('card_show', card_id=card_id))
+
+@app.route('/cards/<int:card_id>/<int:comment_id>/add_reply', methods=['POST'])
+def add_reply(card_id, comment_id):
+    """ User adds Reply Comment"""
+
+    if not g.user:
+        flash('Access unauthorized.', 'danger')
+        return redirect(url_for('card_show', card_id=card_id))
+    
+    
