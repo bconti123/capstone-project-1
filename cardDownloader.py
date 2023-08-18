@@ -17,7 +17,7 @@ import requests
 import time
 ygo_image_url = "https://images.ygoprodeck.com/images/cards/"
 ygo_api_url = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
-cloud_url = "https://res.cloudinary.com/ds6bap5si/image/upload/card-images/"
+cloud_url = "https://res.cloudinary.com/ds6bap5si/image/upload/card-images"
 
 # Set configuration parameter: return "https" URLs by setting secure=True  
 # ==============================
@@ -28,9 +28,7 @@ config = cloudinary.config(secure=True)
 print("****1. Set up and configure the SDK:****\nCredentials: ", config.cloud_name, config.api_key, "\n")
 
 def Upload(card_id, image_url):
-    public_id = card_id
-    # card_jpg = str(card_id) + '.jpg'
-    # if not card_exists(card_jpg):   
+    public_id = card_id  
     response = cloudinary.uploader.upload(image_url, 
     public_id = public_id,
     overwrite=True,
@@ -40,22 +38,37 @@ def Upload(card_id, image_url):
     # else: 
         # print('Skipping', card_id, '- Already exists')
 
-# def card_exists(card_id):
-#     response = cloudinary.api.resource(card_id)
-#     return 'error' not in response
+def card_exists(card_id):
+    response = requests.get(f'{cloud_url}/{card_id}')
+    return 200 == response.status_code
 
-def Upload_all_card():
+# def Upload_all_card():
+#     response = requests.get(ygo_api_url)
+#     data = response.json()
+#     cards = data['data']
+#     for card in cards:
+#         card_id = card['id']
+#         image_url = card['card_images'][0]['image_url']
+#         Upload(card_id, image_url)
+#         time.sleep(1)
+
+def PartialUpload_all_card():
     response = requests.get(ygo_api_url)
     data = response.json()
     cards = data['data']
     for card in cards:
         card_id = card['id']
-        image_url = card['card_images'][0]['image_url']
-        Upload(card_id, image_url)
-        time.sleep(1)
+        card_exists(card_id)
+        if (card_exists):
+            print(f'{card_id} Card already does exist. Skip upload')
+        else:
+            image_url = card['card_images'][0]['image_url']
+            Upload(card_id, image_url)
+            time.sleep(0.5)
+        
 
 
 def main():
-    Upload_all_card()
+    PartialUpload_all_card()
 main()
 
