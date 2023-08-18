@@ -8,7 +8,7 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     env:
-      GH_PAT: ${{ secrets.GH_PAT }}
+      GH_WORKFLOW_PAT: ${{ secrets.GH_WORKFLOW_PAT }}
       Cloudinary_URL: ${{ secrets.Cloudinary_URL }}
     steps:
       - name: Checkout Repository
