@@ -2,7 +2,7 @@ name: Daily Script Run
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Schedule to run every day at midnight (UTC)
+    - cron: '0 1 * * *'  # Schedule to run every day at midnight (UTC)
 
 jobs:
   run-script:
@@ -24,4 +24,4 @@ jobs:
           pip install requests
 
       - name: Run Script
-        run: python /path/to/your/cardDownloader.py
+        run: python path/to/your/cardDownloader.py
