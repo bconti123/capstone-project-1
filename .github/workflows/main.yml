@@ -24,4 +24,4 @@ jobs:
           pip install requests
 
       - name: Run Script
-        run: python path/to/your/cardDownloader.py
+        run: python cardDownloader.py
