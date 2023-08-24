@@ -25,7 +25,6 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install requests
-          pip install dotenv
 
       - name: Run Script
         run: python cardDownloader.py
