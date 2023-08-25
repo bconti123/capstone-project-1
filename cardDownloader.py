@@ -1,7 +1,7 @@
 # Set your Cloudinary credentials
 # ==============================
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 # Import the Cloudinary libraries
 # ==============================
