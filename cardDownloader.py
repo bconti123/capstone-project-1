@@ -58,15 +58,13 @@ def PartialUpload_all_card():
     cards = data['data']
     for card in cards:
         card_id = card['id']
-        card_exists(card_id)
-        if (card_exists):
+        if card_exists(card_id):
             print(f'{card_id} Card already does exist. Skip upload')
         else:
             image_url = card['card_images'][0]['image_url']
             Upload(card_id, image_url)
             time.sleep(0.5)
         
-
 
 def main():
     PartialUpload_all_card()
