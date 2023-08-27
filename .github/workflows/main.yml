@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_PAT: ${{ secrets.GH_PAT }}
-      Cloudinary_URL: ${{ secrets.CLOUDINARY_URL }}
+      CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
