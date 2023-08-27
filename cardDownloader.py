@@ -15,6 +15,8 @@ import json
 
 import requests
 import time
+import os
+cloudinary_url = os.environ.get("CLOUDINARY_URL")
 ygo_image_url = "https://images.ygoprodeck.com/images/cards/"
 ygo_api_url = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
 cloud_url = "https://res.cloudinary.com/ds6bap5si/image/upload/card-images"
